@@ -1,6 +1,65 @@
-# Getting Started with Create React App
+# TalentFlow
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+TalentFlow is a mini hiring platform built with React, TypeScript, and modern web technologies to streamline the recruitment process. It provides a comprehensive set of features for managing jobs, candidates, and assessments.
+
+## Features
+
+### Jobs Management
+- Create, edit, and archive job postings
+- Drag-and-drop reordering of jobs
+- Detailed job view with all relevant information
+- Filter jobs by status and tags
+- Search functionality
+
+### Candidates Management (Coming Soon)
+- Track candidates through the hiring pipeline
+- Kanban board for visualizing candidate progress
+- Candidate profiles with education and experience details
+- Filter and search capabilities
+
+### Assessments (Coming Soon)
+- Build custom assessments with various question types
+- Live preview of assessments
+- Form runtime for candidates to complete assessments
+- Scoring and evaluation tools
+
+## Technology Stack
+
+- **Frontend**: React, TypeScript, Material-UI (MUI)
+- **State Management**: Zustand, React Query
+- **Routing**: React Router DOM
+- **Form Handling**: React Hook Form
+- **Drag and Drop**: DnD Kit
+- **Animations**: Framer Motion
+- **Mock Backend**: MSW (Mock Service Worker)
+- **Local Database**: Dexie.js (IndexedDB wrapper)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/talentflow.git
+   cd talentflow
+   ```
+
+2. Install dependencies
+   ```bash
+   npm install
+   ```
+
+3. Start the development server
+   ```bash
+   npm start
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) to view the app in your browser
 
 ## Available Scripts
 
@@ -11,36 +70,60 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the test runner in the interactive watch mode.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `build` folder.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Project Structure
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+src/
+├── components/       # Reusable UI components
+│   ├── common/       # Common components like Layout
+│   ├── jobs/         # Job-related components
+│   ├── candidates/   # Candidate-related components
+│   └── assessments/  # Assessment-related components
+├── pages/            # Page components for routing
+├── services/         # API and database services
+│   ├── api/          # API service for data fetching
+│   └── db/           # Dexie.js database configuration
+├── store/            # Zustand store for global state
+├── theme/            # MUI theme configuration
+├── types/            # TypeScript type definitions
+├── mocks/            # MSW configuration for API mocking
+├── hooks/            # Custom React hooks
+└── utils/            # Utility functions
+```
 
-### `npm run eject`
+## Development
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Mock Backend
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The application uses MSW (Mock Service Worker) to simulate a backend API. All API calls are intercepted and handled by MSW, which interacts with a local IndexedDB database powered by Dexie.js.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+When the application starts in development mode, it automatically initializes the database with seed data for jobs, candidates, and assessments.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Adding New Features
 
-## Learn More
+1. Define types in `src/types/index.ts`
+2. Add API handlers in `src/mocks/handlers.ts`
+3. Create components in the appropriate directory
+4. Add routes in `src/App.tsx`
+5. Update the global store in `src/store/index.ts` if needed
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Acknowledgments
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Material-UI](https://mui.com/)
+- [MSW](https://mswjs.io/)
+- [Dexie.js](https://dexie.org/)
+- [React Query](https://tanstack.com/query/latest)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [DnD Kit](https://dndkit.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [React Hook Form](https://react-hook-form.com/)
