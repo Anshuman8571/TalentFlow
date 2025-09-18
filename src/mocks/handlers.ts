@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import db from '../services/db';
-import { Job, Candidate, Assessment, StatusChange, Note } from '../types';
+import { Job, Assessment, StatusChange, Note } from '../types';
 
 // Helper function to simulate random API failures (5-10% failure rate)
 const shouldFail = () => Math.random() < 0.075;

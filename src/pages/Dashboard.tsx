@@ -32,7 +32,6 @@ const Dashboard: React.FC = () => {
     queryFn: () => api.candidates.getCandidates(),
   });
 
-  const isLoading = isLoadingJobs || isLoadingCandidates;
   const jobs = jobsResponse?.data || [];
   const candidates = candidatesResponse?.data || [];
 

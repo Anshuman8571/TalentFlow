@@ -1,39 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
-import { Job, Candidate } from '../../types';
-import { Container, Typography, Box, Paper, Chip, Divider, Button, CircularProgress, Alert } from '@mui/material';
-import { format } from 'date-fns';
-import { useStore } from '../../store';
+import { Job } from '../../types';
+import { Typography, Box, Paper, Chip, Divider, Button, CircularProgress } from '@mui/material';
 // We will create this ApplyModal component in the next step
 // import ApplyModal from '../../components/public/ApplyModal'; 
 
 const PublicJobPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const addNotification = useStore((state) => state.addNotification);
 
   const { data: job, isLoading, isError } = useQuery<Job>({
     queryKey: ['publicJob', slug],
     queryFn: () => api.jobs.getJobBySlug(slug!),
     enabled: !!slug,
-  });
-
-  const submitApplicationMutation = useMutation({
-    mutationFn: (applicationData: Omit<Candidate, 'id' | 'createdAt' | 'updatedAt' | 'statusHistory' | 'notes'>) => 
-      api.candidates.createCandidate(applicationData),
-    onSuccess: (newCandidate) => {
-      setIsApplyModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: ['candidates'] });
-      addNotification(`New application from ${newCandidate.name} for ${job?.title}`, `/candidates/${newCandidate.id}`);
-      // In a real app, you'd show a success toast. alert is a placeholder.
-      alert('Application submitted successfully!'); 
-    },
-    onError: (error) => {
-      alert(`Error: ${error.message}`);
-    }
   });
 
   if (isLoading) return <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}><CircularProgress /></Box>;
@@ -63,7 +43,7 @@ const PublicJobPage: React.FC = () => {
         <Button 
           variant="contained" 
           size="large"
-          onClick={() => setIsApplyModalOpen(true)}
+          disabled
         >
           Apply for this position
         </Button>

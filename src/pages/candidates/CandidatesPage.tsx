@@ -13,7 +13,6 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Paper,
   Pagination,
 } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';

@@ -20,14 +20,12 @@ import {
   RadioGroup,
   Radio,
   Divider,
-  Alert,
   // FIX: Import the missing CircularProgress component
   CircularProgress
 } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { api } from '../../services/api';
 import { Assessment, QuestionType, Job } from '../../types';
-import { motion } from 'framer-motion';
 
 type AssessmentFormData = Omit<Assessment, 'id' | 'createdAt' | 'updatedAt'>;
 

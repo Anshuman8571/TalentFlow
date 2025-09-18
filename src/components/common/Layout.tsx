@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -7,7 +7,6 @@ import {
   CircularProgress,
   Button,
   Stack,
-  useTheme,
   CssBaseline,
   Snackbar,
   Alert,
@@ -28,7 +27,6 @@ const navItems = [
 ];
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   

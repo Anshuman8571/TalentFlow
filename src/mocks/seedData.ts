@@ -1,4 +1,4 @@
-import { Job, Candidate, Assessment, AssessmentSection, Question, QuestionType, HiringStage, JobStatus, AssessmentResponse } from '../types';
+import { Job, Candidate, Assessment, AssessmentSection, QuestionType, HiringStage, AssessmentResponse } from '../types';
 
 // Helper function to generate a random date within the last 3 months
 const getRandomRecentDate = () => {

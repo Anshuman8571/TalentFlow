@@ -1,5 +1,3 @@
-import React from 'react';
-
 // Re-export all icons from DashboardIllustrations
 export {
   SmartMatchingIcon,
