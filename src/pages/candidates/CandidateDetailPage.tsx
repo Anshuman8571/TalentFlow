@@ -208,4 +208,3 @@ const CandidateDetailPage: React.FC = () => {
 };
 
 export default CandidateDetailPage;
-

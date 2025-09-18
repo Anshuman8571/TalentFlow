@@ -14,6 +14,7 @@ import CandidateDetailPage from './pages/candidates/CandidateDetailPage';
 import AssessmentsPage from './pages/assessments/AssessmentsPage';
 import AssessmentBuilderPage from './pages/assessments/AssessmentBuilderPage';
 import LoginPage from './pages/auth/LoginPage';
+import SignupPage from './pages/auth/SignupPage';
 
 const queryClient = new QueryClient();
 
@@ -42,8 +43,9 @@ function App() {
         <CssBaseline />
         {/* The <Router> component was here and has been removed */}
         <Routes>
-          {/* Add a public route for the login page */}
+          {/* Add public routes for authentication */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           
           {/* All other routes will now be rendered through the AppLayout component */}
           <Route path="/*" element={<AppLayout />} />
@@ -57,4 +59,3 @@ function App() {
 }
 
 export default App;
-

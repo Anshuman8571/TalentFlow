@@ -1,37 +1,50 @@
 import React, { useState } from 'react';
 import {
   Container,
-  Typography,
-  Box,
+  Paper,
   TextField,
   Button,
-  Paper,
-  Divider,
+  Typography,
+  Box,
   Tabs,
   Tab,
+  Divider,
   Link as MuiLink,
+  Checkbox,
+  FormControlLabel,
   Grid,
 } from '@mui/material';
-import { Google as GoogleIcon, Facebook as FacebookIcon, Apple as AppleIcon, Business, Security, TrendingUp } from '@mui/icons-material';
+import { Google as GoogleIcon, Facebook as FacebookIcon, Apple as AppleIcon } from '@mui/icons-material';
+import { Business, Security, TrendingUp } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import { useForm, Controller } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { TeamCollaborationIcon } from '../../components/common/HiringIllustrations';
 
-type LoginMethod = 'email' | 'phone';
+type SignupMethod = 'email' | 'phone';
 
-const LoginPage: React.FC = () => {
-  const [method, setMethod] = useState<LoginMethod>('email');
-  const { control, handleSubmit, formState: { errors } } = useForm();
+interface SignupFormData {
+  firstName: string;
+  lastName: string;
+  credential: string;
+  password: string;
+  confirmPassword: string;
+  company?: string;
+  agreeToTerms: boolean;
+}
 
-  const handleMethodChange = (event: React.SyntheticEvent, newMethod: LoginMethod) => {
+const SignupPage: React.FC = () => {
+  const [method, setMethod] = useState<SignupMethod>('email');
+  const { control, handleSubmit, formState: { errors }, watch } = useForm<SignupFormData>();
+
+  const handleMethodChange = (event: React.SyntheticEvent, newMethod: SignupMethod) => {
     setMethod(newMethod);
   };
 
-  const onSubmit = (data: any) => {
-    // In a real app, you would handle the login logic here
+  const onSubmit = (data: SignupFormData) => {
+    // In a real app, you would handle the signup logic here
     console.log(data);
-    alert(`Logging in with ${method}: ${data.credential}`);
+    alert(`Creating account with ${method}: ${data.credential}`);
   };
 
   return (
@@ -63,10 +76,10 @@ const LoginPage: React.FC = () => {
             >
               <Box sx={{ color: 'white', mb: 4 }}>
                 <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-                  TalentFlow
+                  Join TalentFlow
                 </Typography>
                 <Typography variant="h5" sx={{ mb: 4, opacity: 0.9 }}>
-                  Streamline your hiring process with intelligent recruitment tools
+                  Start building your dream team with our powerful recruitment platform
                 </Typography>
                 
                 {/* Feature highlights */}
@@ -74,19 +87,19 @@ const LoginPage: React.FC = () => {
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Business sx={{ fontSize: 32, opacity: 0.8 }} />
                     <Typography variant="body1">
-                      Manage job postings and applications efficiently
+                      Post unlimited jobs and manage applications
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <TrendingUp sx={{ fontSize: 32, opacity: 0.8 }} />
                     <Typography variant="body1">
-                      Track hiring metrics and performance analytics
+                      Advanced analytics and hiring insights
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Security sx={{ fontSize: 32, opacity: 0.8 }} />
                     <Typography variant="body1">
-                      Secure candidate data management
+                      Enterprise-grade security and compliance
                     </Typography>
                   </Box>
                 </Box>
@@ -96,7 +109,7 @@ const LoginPage: React.FC = () => {
             </motion.div>
           </Grid>
 
-          {/* Right side - Login Form */}
+          {/* Right side - Signup Form */}
           <Grid item xs={12} md={6}>
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -122,13 +135,13 @@ const LoginPage: React.FC = () => {
                   transition={{ delay: 0.4 }}
                 >
                   <Typography component="h1" variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: 'primary.main' }}>
-                    Welcome Back
+                    Create Account
                   </Typography>
                   <Typography variant="body2" color="text.secondary" align="center">
-                    Don't have an account?{' '}
+                    Already have an account?{' '}
                     <MuiLink 
                       component={Link} 
-                      to="/signup" 
+                      to="/login" 
                       underline="hover"
                       sx={{ 
                         fontWeight: 'bold',
@@ -136,7 +149,7 @@ const LoginPage: React.FC = () => {
                         '&:hover': { color: 'primary.dark' }
                       }}
                     >
-                      Sign Up
+                      Sign In
                     </MuiLink>
                   </Typography>
                 </motion.div>
@@ -165,6 +178,84 @@ const LoginPage: React.FC = () => {
                     transition={{ duration: 0.3 }}
                   >
                     <form onSubmit={handleSubmit(onSubmit)}>
+                      <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                          <Controller
+                            name="firstName"
+                            control={control}
+                            defaultValue=""
+                            rules={{ required: 'First name is required' }}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                fullWidth
+                                label="First Name"
+                                error={!!errors.firstName}
+                                helperText={errors.firstName?.message as string}
+                                sx={{
+                                  '& .MuiOutlinedInput-root': {
+                                    borderRadius: 2,
+                                    '&:hover fieldset': {
+                                      borderColor: 'primary.main',
+                                    },
+                                  }
+                                }}
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Controller
+                            name="lastName"
+                            control={control}
+                            defaultValue=""
+                            rules={{ required: 'Last name is required' }}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                fullWidth
+                                label="Last Name"
+                                error={!!errors.lastName}
+                                helperText={errors.lastName?.message as string}
+                                sx={{
+                                  '& .MuiOutlinedInput-root': {
+                                    borderRadius: 2,
+                                    '&:hover fieldset': {
+                                      borderColor: 'primary.main',
+                                    },
+                                  }
+                                }}
+                              />
+                            )}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Controller
+                        name="company"
+                        control={control}
+                        defaultValue=""
+                        rules={{ required: 'Company name is required' }}
+                        render={({ field }) => (
+                          <TextField
+                            {...field}
+                            margin="normal"
+                            fullWidth
+                            label="Company Name"
+                            error={!!errors.company}
+                            helperText={errors.company?.message as string}
+                            sx={{
+                              '& .MuiOutlinedInput-root': {
+                                borderRadius: 2,
+                                '&:hover fieldset': {
+                                  borderColor: 'primary.main',
+                                },
+                              }
+                            }}
+                          />
+                        )}
+                      />
+
                       <Controller
                         name="credential"
                         control={control}
@@ -181,7 +272,7 @@ const LoginPage: React.FC = () => {
                             {...field}
                             margin="normal"
                             fullWidth
-                            label={method === 'email' ? 'Email' : 'Phone Number'}
+                            label={method === 'email' ? 'Work Email' : 'Phone Number'}
                             autoComplete={method === 'email' ? 'email' : 'tel'}
                             error={!!errors.credential}
                             helperText={errors.credential?.message as string}
@@ -196,6 +287,104 @@ const LoginPage: React.FC = () => {
                           />
                         )}
                       />
+
+                      <Grid container spacing={2} sx={{ mt: 1 }}>
+                        <Grid item xs={6}>
+                          <Controller
+                            name="password"
+                            control={control}
+                            defaultValue=""
+                            rules={{
+                              required: 'Password is required',
+                              minLength: { value: 8, message: 'Password must be at least 8 characters' },
+                            }}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                fullWidth
+                                type="password"
+                                label="Password"
+                                error={!!errors.password}
+                                helperText={errors.password?.message as string}
+                                sx={{
+                                  '& .MuiOutlinedInput-root': {
+                                    borderRadius: 2,
+                                    '&:hover fieldset': {
+                                      borderColor: 'primary.main',
+                                    },
+                                  }
+                                }}
+                              />
+                            )}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Controller
+                            name="confirmPassword"
+                            control={control}
+                            defaultValue=""
+                            rules={{
+                              required: 'Please confirm your password',
+                              validate: (value) => value === watch('password') || 'Passwords do not match',
+                            }}
+                            render={({ field }) => (
+                              <TextField
+                                {...field}
+                                fullWidth
+                                type="password"
+                                label="Confirm Password"
+                                error={!!errors.confirmPassword}
+                                helperText={errors.confirmPassword?.message as string}
+                                sx={{
+                                  '& .MuiOutlinedInput-root': {
+                                    borderRadius: 2,
+                                    '&:hover fieldset': {
+                                      borderColor: 'primary.main',
+                                    },
+                                  }
+                                }}
+                              />
+                            )}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Controller
+                        name="agreeToTerms"
+                        control={control}
+                        defaultValue={false}
+                        rules={{ required: 'You must agree to the terms and conditions' }}
+                        render={({ field }) => (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                {...field}
+                                checked={field.value}
+                                sx={{
+                                  '&.Mui-checked': {
+                                    color: 'primary.main',
+                                  }
+                                }}
+                              />
+                            }
+                            label={
+                              <Typography variant="body2" color="text.secondary">
+                                I agree to the{' '}
+                                <MuiLink href="#" sx={{ color: 'primary.main' }}>Terms of Service</MuiLink>
+                                {' '}and{' '}
+                                <MuiLink href="#" sx={{ color: 'primary.main' }}>Privacy Policy</MuiLink>
+                              </Typography>
+                            }
+                            sx={{ mt: 2, alignItems: 'flex-start' }}
+                          />
+                        )}
+                      />
+                      {errors.agreeToTerms && (
+                        <Typography variant="caption" color="error" sx={{ display: 'block', mt: 1 }}>
+                          {errors.agreeToTerms.message as string}
+                        </Typography>
+                      )}
+
                       <Button
                         type="submit"
                         fullWidth
@@ -216,7 +405,7 @@ const LoginPage: React.FC = () => {
                           transition: 'all 0.3s ease-in-out',
                         }}
                       >
-                        Continue with {method === 'email' ? 'Email' : 'Phone'}
+                        Create Account
                       </Button>
                     </form>
                   </motion.div>
@@ -291,13 +480,6 @@ const LoginPage: React.FC = () => {
                     Continue with Apple
                   </Button>
                 </Box>
-
-                <Typography variant="caption" color="text.secondary" align="center" sx={{ mt: 4, opacity: 0.8 }}>
-                  By continuing, you agree to our{' '}
-                  <MuiLink href="#" sx={{ color: 'primary.main' }}>Terms of Use</MuiLink>
-                  {' '}and{' '}
-                  <MuiLink href="#" sx={{ color: 'primary.main' }}>Privacy Policy</MuiLink>.
-                </Typography>
               </Paper>
             </motion.div>
           </Grid>
@@ -307,4 +489,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;

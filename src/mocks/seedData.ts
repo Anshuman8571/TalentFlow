@@ -198,6 +198,189 @@ const assessmentTemplates = [
                 { id: crypto.randomUUID(), type: 'file-upload' as QuestionType, text: 'Please upload a sample of your technical writing (e.g., API documentation, user guide).', required: true },
             ]}
         ]
+    },
+    {
+        title: 'Full Stack Developer Assessment',
+        description: 'Comprehensive evaluation of both frontend and backend development skills.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Frontend Skills', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'Which CSS property is used to create a flexbox container?', required: true, options: ['display: flex', 'flex-direction: row', 'justify-content: center', 'align-items: center'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Explain the concept of virtual DOM in React.', required: true, maxLength: 300 },
+            ]},
+            { id: crypto.randomUUID(), title: 'Backend Skills', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which HTTP methods are idempotent?', required: true, options: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Cybersecurity Specialist Test',
+        description: 'Evaluates knowledge of security principles, threat analysis, and risk management.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Security Fundamentals', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What does CIA stand for in cybersecurity?', required: true, options: ['Confidentiality, Integrity, Availability', 'Central Intelligence Agency', 'Computer Information Access', 'Cyber Intelligence Analysis'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Describe the difference between symmetric and asymmetric encryption.', required: true },
+            ]},
+            { id: crypto.randomUUID(), title: 'Threat Assessment', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which of the following are common types of cyber attacks?', required: true, options: ['Phishing', 'SQL Injection', 'DDoS', 'Social Engineering', 'Buffer Overflow'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Machine Learning Engineer Evaluation',
+        description: 'Tests understanding of ML algorithms, data preprocessing, and model deployment.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'ML Algorithms', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'Which algorithm is best suited for binary classification problems?', required: true, options: ['Linear Regression', 'Logistic Regression', 'K-Means Clustering', 'PCA'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Explain the bias-variance tradeoff in machine learning.', required: true },
+            ]},
+            { id: crypto.randomUUID(), title: 'Data Processing', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which techniques are used for feature scaling?', required: true, options: ['Min-Max Scaling', 'Standardization', 'Normalization', 'One-Hot Encoding'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Cloud Solutions Architect Assessment',
+        description: 'Comprehensive evaluation of cloud architecture design and implementation skills.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Architecture Design', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Design a scalable architecture for a high-traffic e-commerce application using AWS services.', required: true },
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'Which AWS service provides managed Kubernetes?', required: true, options: ['ECS', 'EKS', 'Fargate', 'Lambda'] },
+            ]},
+            { id: crypto.randomUUID(), title: 'Cost Optimization', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which strategies help optimize cloud costs?', required: true, options: ['Reserved Instances', 'Spot Instances', 'Auto Scaling', 'Right Sizing', 'Load Balancing'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Digital Marketing Specialist Assessment',
+        description: 'Evaluates knowledge of SEO, SEM, social media marketing, and analytics.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'SEO & Content Marketing', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the primary purpose of meta descriptions?', required: true, options: ['Direct ranking factor', 'Improve click-through rates', 'Keyword stuffing', 'Page loading speed'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Describe your approach to creating a content marketing strategy for a B2B SaaS company.', required: true, maxLength: 400 },
+            ]},
+            { id: crypto.randomUUID(), title: 'Analytics & Performance', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which metrics are important for measuring social media ROI?', required: true, options: ['Engagement Rate', 'Conversion Rate', 'Follower Count', 'Click-Through Rate', 'Cost Per Acquisition'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Sales Development Representative Evaluation',
+        description: 'Tests prospecting skills, communication abilities, and sales methodology knowledge.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Prospecting & Outreach', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Write a cold email to a potential client for a CRM software solution.', required: true, maxLength: 300 },
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the most effective time to make cold calls?', required: true, options: ['Early morning (8-10 AM)', 'Late afternoon (4-6 PM)', 'It depends on the target audience', 'Anytime during business hours'] },
+            ]},
+            { id: crypto.randomUUID(), title: 'Sales Process', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which are key components of effective sales qualification?', required: true, options: ['Budget', 'Authority', 'Need', 'Timeline', 'Competition'] },
+            ]}
+        ]
+    },
+    {
+        title: 'HR Generalist Assessment',
+        description: 'Covers recruitment, employee relations, compliance, and HR best practices.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Recruitment & Selection', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'How would you handle a situation where a hiring manager wants to reject a qualified candidate based on unconscious bias?', required: true },
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the primary purpose of behavioral interviewing?', required: true, options: ['Test technical skills', 'Predict future performance', 'Check cultural fit', 'Verify experience'] },
+            ]},
+            { id: crypto.randomUUID(), title: 'Employee Relations', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which factors contribute to employee engagement?', required: true, options: ['Recognition', 'Career Development', 'Work-Life Balance', 'Compensation', 'Management Support'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Financial Analyst Evaluation',
+        description: 'Tests financial modeling, analysis skills, and understanding of financial statements.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Financial Analysis', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Explain the difference between NPV and IRR, and when you would use each.', required: true },
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'Which ratio measures a company\'s ability to pay short-term obligations?', required: true, options: ['Debt-to-Equity', 'Current Ratio', 'Return on Assets', 'Price-to-Earnings'] },
+            ]},
+            { id: crypto.randomUUID(), title: 'Valuation Methods', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which are common valuation methods for companies?', required: true, options: ['DCF Analysis', 'Comparable Company Analysis', 'Precedent Transactions', 'Asset-Based Valuation', 'Book Value'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Graphic Designer Portfolio Review',
+        description: 'Evaluates design principles, creativity, and technical proficiency in design tools.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Design Fundamentals', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the golden ratio in design?', required: true, options: ['1:1.618', '1:2', '2:3', '3:4'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Describe your design process from concept to final delivery.', required: true, maxLength: 350 },
+            ]},
+            { id: crypto.randomUUID(), title: 'Portfolio Submission', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'file-upload' as QuestionType, text: 'Upload your best 3 design pieces that showcase your range and creativity.', required: true },
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which design software are you proficient in?', required: true, options: ['Adobe Photoshop', 'Adobe Illustrator', 'Figma', 'Sketch', 'Adobe InDesign'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Operations Manager Assessment',
+        description: 'Tests process optimization, team management, and operational efficiency skills.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Process Improvement', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Describe a time when you identified and implemented a process improvement. What was the impact?', required: true },
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the primary goal of Lean methodology?', required: true, options: ['Reduce costs', 'Eliminate waste', 'Increase speed', 'Improve quality'] },
+            ]},
+            { id: crypto.randomUUID(), title: 'Team Leadership', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which are effective strategies for managing remote teams?', required: true, options: ['Regular Check-ins', 'Clear Communication Channels', 'Goal Setting', 'Performance Tracking', 'Team Building Activities'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Content Writer & Copywriter Test',
+        description: 'Evaluates writing skills, creativity, and understanding of different content formats.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Writing Sample', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Write a compelling 150-word product description for a new fitness tracking smartwatch.', required: true, maxLength: 200 },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Create a catchy headline for a blog post about sustainable living tips.', required: true, maxLength: 100 },
+            ]},
+            { id: crypto.randomUUID(), title: 'Content Strategy', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which content formats are effective for B2B marketing?', required: true, options: ['White Papers', 'Case Studies', 'Webinars', 'Infographics', 'Email Newsletters'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Customer Success Manager Evaluation',
+        description: 'Tests customer relationship management, problem-solving, and retention strategies.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Customer Relationship Management', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'How would you handle a situation where a key customer is considering churning due to product limitations?', required: true },
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the most important metric for measuring customer success?', required: true, options: ['Customer Satisfaction Score', 'Net Promoter Score', 'Customer Lifetime Value', 'Churn Rate'] },
+            ]},
+            { id: crypto.randomUUID(), title: 'Growth & Retention', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which strategies help reduce customer churn?', required: true, options: ['Proactive Support', 'Regular Check-ins', 'Product Training', 'Usage Analytics', 'Feedback Loops'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Network Administrator Assessment',
+        description: 'Evaluates networking concepts, security protocols, and troubleshooting skills.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Network Fundamentals', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the default subnet mask for a Class C network?', required: true, options: ['255.255.255.0', '255.255.0.0', '255.0.0.0', '255.255.255.255'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'Explain the difference between TCP and UDP protocols.', required: true },
+            ]},
+            { id: crypto.randomUUID(), title: 'Network Security', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which are common network security measures?', required: true, options: ['Firewalls', 'VPN', 'IDS/IPS', 'Network Segmentation', 'Access Control Lists'] },
+            ]}
+        ]
+    },
+    {
+        title: 'Project Manager (Agile/Scrum) Assessment',
+        description: 'Tests Agile methodologies, project planning, and team coordination skills.',
+        sections: [
+            { id: crypto.randomUUID(), title: 'Agile Methodology', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'single-choice' as QuestionType, text: 'What is the recommended duration for a Sprint in Scrum?', required: true, options: ['1 week', '2-4 weeks', '6 weeks', 'It varies by project'] },
+                { id: crypto.randomUUID(), type: 'text' as QuestionType, text: 'How would you handle a situation where the development team consistently misses Sprint commitments?', required: true },
+            ]},
+            { id: crypto.randomUUID(), title: 'Project Planning', description: '', questions: [
+                { id: crypto.randomUUID(), type: 'multi-choice' as QuestionType, text: 'Which are key components of effective project planning?', required: true, options: ['Scope Definition', 'Risk Assessment', 'Resource Allocation', 'Timeline Estimation', 'Stakeholder Communication'] },
+            ]}
+        ]
     }
 ];
 

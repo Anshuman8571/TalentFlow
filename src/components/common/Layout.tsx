@@ -3,29 +3,22 @@ import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Box,
   CircularProgress,
   Button,
   Stack,
-  Divider,
   useTheme,
-  IconButton,
   CssBaseline,
   Snackbar,
-  Alert
+  Alert,
+  Tab,
+  Tabs,
+  Container,
 } from '@mui/material';
-import { Menu as MenuIcon, Work as WorkIcon, People as PeopleIcon, Assignment as AssignmentIcon, Dashboard as DashboardIcon } from '@mui/icons-material';
+import { Work as WorkIcon, People as PeopleIcon, Assignment as AssignmentIcon, Dashboard as DashboardIcon } from '@mui/icons-material';
 import { useStore } from '../../store';
 import Logo from './Logo';
 import NotificationBell from './NotificationBell';
-
-const drawerWidth = 240;
 
 const navItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
@@ -37,22 +30,16 @@ const navItems = [
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const theme = useTheme();
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const navigate = useNavigate();
   
   // Global state for loading indicators and error notifications
   const isLoading = useStore((state) => state.isLoading);
   const error = useStore((state) => state.error);
   const clearError = useStore((state) => state.clearError);
-
-  const navigate = useNavigate();
   
   // Placeholder for authentication state
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-  
   const handleLogin = () => navigate('/login');
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -60,109 +47,110 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
   const handleSignUp = () => navigate('/login');
 
-  const drawerContent = (
-    <div>
-      <Toolbar sx={{ px: 2 }}>
-        <Logo />
-      </Toolbar>
-      <Divider />
-      <Box sx={{ overflow: 'auto', p: 1 }}>
-        <List>
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
-            return (
-              <ListItem key={item.text} disablePadding>
-                <ListItemButton component={NavLink} to={item.path} selected={isActive} sx={{ borderRadius: 2 }}>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-      </Box>
-    </div>
-  );
+  // Get current tab value based on location
+  const getCurrentTab = () => {
+    const currentItem = navItems.find(item => 
+      location.pathname === item.path || 
+      (item.path !== '/dashboard' && location.pathname.startsWith(item.path))
+    );
+    return currentItem ? navItems.indexOf(currentItem) : 0;
+  };
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    navigate(navItems[newValue].path);
+  };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
-        }}
         elevation={0}
-        color="inherit"
-        variant="outlined"
+        sx={{
+          bgcolor: 'background.paper',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          color: 'text.primary',
+        }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { md: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Container maxWidth="xl">
+          <Toolbar sx={{ px: { xs: 0, sm: 0 } }}>
+            {/* Logo */}
+            <Box sx={{ mr: 4 }}>
+              <Logo />
+            </Box>
 
-          <Box sx={{ flexGrow: 1 }} />
-          
-          {isLoading && <CircularProgress size={24} color="inherit" sx={{mr: 2}} />}
+            {/* Navigation Tabs */}
+            <Tabs
+              value={getCurrentTab()}
+              onChange={handleTabChange}
+              sx={{
+                flexGrow: 1,
+                '& .MuiTab-root': {
+                  textTransform: 'none',
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  minHeight: 64,
+                  px: 3,
+                  color: 'text.secondary',
+                  '&.Mui-selected': {
+                    color: 'primary.main',
+                  },
+                },
+                '& .MuiTabs-indicator': {
+                  height: 3,
+                  borderRadius: '3px 3px 0 0',
+                },
+              }}
+            >
+              {navItems.map((item, index) => (
+                <Tab
+                  key={item.text}
+                  label={item.text}
+                  icon={item.icon}
+                  iconPosition="start"
+                  sx={{
+                    '& .MuiTab-iconWrapper': {
+                      mr: 1,
+                    },
+                  }}
+                />
+              ))}
+            </Tabs>
+            
+            {/* Right side actions */}
+            <Box sx={{ ml: 'auto' }} />
+            
+            {isLoading && <CircularProgress size={24} color="inherit" sx={{mr: 2}} />}
 
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <NotificationBell />
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              <NotificationBell />
 
-            {isAuthenticated ? (
-              <Button variant="outlined" color="inherit" onClick={handleLogout}>
-                Log Out
-              </Button>
-            ) : (
-              <>
-                <Button variant="outlined" color="inherit" onClick={handleLogin} sx={{ borderRadius: '20px' }}>
-                  Log In
+              {isAuthenticated ? (
+                <Button variant="outlined" color="inherit" onClick={handleLogout}>
+                  Log Out
                 </Button>
-                <Button variant="contained" onClick={handleSignUp} sx={{ borderRadius: '20px' }}>
-                  Sign Up
-                </Button>
-              </>
-            )}
-          </Stack>
-        </Toolbar>
+              ) : (
+                <>
+                  <Button variant="outlined" color="inherit" onClick={handleLogin} sx={{ borderRadius: '20px' }}>
+                    Log In
+                  </Button>
+                  <Button variant="contained" onClick={handleSignUp} sx={{ borderRadius: '20px' }}>
+                    Sign Up
+                  </Button>
+                </>
+              )}
+            </Stack>
+          </Toolbar>
+        </Container>
       </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-        >
-          {drawerContent}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: 'none' },
-          }}
-          open
-        >
-          {drawerContent}
-        </Drawer>
-      </Box>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` } }}>
-        <Toolbar />
+
+      {/* Main content */}
+      <Box component="main" sx={{ flexGrow: 1, pt: 10, pb: 4 }}>
         {children}
       </Box>
+
+      {/* Error notification */}
       <Snackbar
         open={!!error}
         autoHideDuration={6000}
@@ -178,4 +166,3 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default Layout;
-

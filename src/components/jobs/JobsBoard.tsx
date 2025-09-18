@@ -198,31 +198,95 @@ const JobsBoard: React.FC = () => {
   }, [searchTerm, statusFilter, tagFilter]);
   
   return (
-    <Box sx={{ py: 3 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">Jobs Board</Typography>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreateJob}>Add New Job</Button>
+    <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Typography variant="h5" component="h2" sx={{ fontWeight: 600, color: '#1976d2' }}>
+          Active Jobs
+        </Typography>
+        <Button 
+          variant="contained" 
+          startIcon={<AddIcon />} 
+          onClick={handleCreateJob}
+          sx={{
+            borderRadius: 2,
+            px: 3,
+            py: 1,
+            fontWeight: 600,
+            boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
+            '&:hover': {
+              boxShadow: '0 6px 16px rgba(25, 118, 210, 0.4)',
+              transform: 'translateY(-1px)',
+            },
+            transition: 'all 0.2s ease-in-out',
+          }}
+        >
+          Add New Job
+        </Button>
       </Box>
       
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Grid container spacing={2}>
+      <Paper 
+        elevation={2} 
+        sx={{ 
+          p: 3, 
+          mb: 4, 
+          borderRadius: 3,
+          background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+          border: '1px solid #e0e0e0',
+        }}
+      >
+        <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={4}>
-            <TextField fullWidth placeholder="Search jobs..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} InputProps={{ startAdornment: (<InputAdornment position="start"><SearchIcon /></InputAdornment>), }} />
+            <TextField
+              fullWidth
+              variant="outlined"
+              placeholder="Search jobs..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  '&:hover fieldset': {
+                    borderColor: '#1976d2',
+                  },
+                },
+              }}
+            />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <FormControl fullWidth>
               <InputLabel>Status</InputLabel>
-              <Select value={statusFilter} label="Status" onChange={(e) => setStatusFilter(e.target.value as JobStatus | 'all')}>
-                <MenuItem value="all">All</MenuItem>
+              <Select
+                value={statusFilter}
+                label="Status"
+                onChange={(e) => setStatusFilter(e.target.value as JobStatus | 'all')}
+                sx={{
+                  borderRadius: 2,
+                }}
+              >
+                <MenuItem value="all">All Status</MenuItem>
                 <MenuItem value="active">Active</MenuItem>
                 <MenuItem value="archived">Archived</MenuItem>
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={3}>
             <FormControl fullWidth>
               <InputLabel>Filter by Tag</InputLabel>
-              <Select value={tagFilter || ''} label="Filter by Tag" onChange={(e) => setTagFilter(e.target.value || null)}>
+              <Select
+                value={tagFilter || ''}
+                label="Filter by Tag"
+                onChange={(e) => setTagFilter(e.target.value || null)}
+                sx={{
+                  borderRadius: 2,
+                }}
+              >
                 <MenuItem value="">All Tags</MenuItem>
                 {allTags.map((tag) => (
                   <MenuItem key={tag} value={tag}>
@@ -232,31 +296,120 @@ const JobsBoard: React.FC = () => {
               </Select>
             </FormControl>
           </Grid>
+          <Grid item xs={12} md={2}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => {
+                setSearchTerm('');
+                setStatusFilter('all');
+                setTagFilter(null);
+              }}
+              sx={{
+                borderRadius: 2,
+                py: 1.5,
+                fontWeight: 500,
+              }}
+            >
+              Clear Filters
+            </Button>
+          </Grid>
         </Grid>
       </Paper>
       
+      {/* Jobs Grid */}
       {isLoading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress />
-      </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+          <CircularProgress size={60} />
+        </Box>
       ) : error ? (
-        <Alert severity="error" sx={{ mb: 3 }}>Failed to load jobs. Please try again.</Alert>
+        <Paper 
+          sx={{ 
+            p: 4, 
+            textAlign: 'center', 
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%)',
+            border: '1px solid #e57373',
+          }}
+        >
+          <Typography variant="h6" color="error" gutterBottom>
+            Error loading jobs
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {error instanceof Error ? error.message : 'Failed to load jobs. Please try again.'}
+          </Typography>
+        </Paper>
       ) : sortedJobs.length === 0 ? (
-        <Alert severity="info" sx={{ mb: 3 }}>No jobs found matching your filters.</Alert>
+        <Paper 
+          sx={{ 
+            p: 6, 
+            textAlign: 'center', 
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%)',
+            border: '1px solid #ba68c8',
+          }}
+        >
+          <Typography variant="h6" gutterBottom sx={{ color: '#7b1fa2' }}>
+            No jobs found
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            {searchTerm || statusFilter !== 'all' || tagFilter 
+              ? 'Try adjusting your search criteria or filters.'
+              : 'Get started by creating your first job posting.'
+            }
+          </Typography>
+          {!searchTerm && statusFilter === 'all' && !tagFilter && (
+            <Button 
+              variant="contained" 
+              startIcon={<AddIcon />} 
+              onClick={handleCreateJob}
+              sx={{ mt: 2 }}
+            >
+              Create First Job
+            </Button>
+          )}
+        </Paper>
       ) : (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd} modifiers={[restrictToVerticalAxis]}>
           <SortableContext items={sortedJobs.map(job => job.id)} strategy={verticalListSortingStrategy}>
-            <Box sx={{ mb: 3 }}>
+            <Grid container spacing={3}>
               {sortedJobs.map((job) => (
-                <JobCard key={job.id} job={job} onEdit={handleEditJob} onArchive={() => handleUpdateStatus(job, 'archived')} onUnarchive={() => handleUpdateStatus(job, 'active')} />
+                <Grid item xs={12} md={6} lg={4} key={job.id}>
+                  <JobCard job={job} onEdit={handleEditJob} onArchive={() => handleUpdateStatus(job, 'archived')} onUnarchive={() => handleUpdateStatus(job, 'active')} />
+                </Grid>
               ))}
-            </Box>
+            </Grid>
           </SortableContext>
         </DndContext>
       )}
       
+      {/* Enhanced Pagination */}
       {totalPages > 1 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <Pagination count={totalPages} page={page} onChange={(_, newPage) => setPage(newPage)} color="primary" />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <Paper 
+            elevation={2} 
+            sx={{ 
+              p: 2, 
+              borderRadius: 3,
+              background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            }}
+          >
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={(_, newPage) => setPage(newPage)}
+              color="primary"
+              size="large"
+              showFirstButton
+              showLastButton
+              sx={{
+                '& .MuiPaginationItem-root': {
+                  borderRadius: 2,
+                  fontWeight: 500,
+                },
+              }}
+            />
+          </Paper>
         </Box>
       )}
       
