@@ -12,7 +12,6 @@ import {
   Chip,
   Pagination,
   CircularProgress,
-  Alert,
   Paper,
   Grid
 } from '@mui/material';
@@ -21,7 +20,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DndContext, closestCenter, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { Job, JobStatus, Candidate } from '../../types';
+import { Job, JobStatus } from '../../types';
 import JobCard from './JobCard';
 import JobModal from './JobModal';
 import { api } from '../../services/api';

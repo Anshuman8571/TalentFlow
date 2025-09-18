@@ -36,10 +36,10 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({ candidateId }) =>
     queryKey: ['assessments'],
     queryFn: () => api.assessments.getAssessments(),
   });
-  const allAssessments = assessmentsResponse?.data || [];
 
   // Memoize the grading logic to prevent re-calculation on every render
   const gradedResults = useMemo(() => {
+    const allAssessments = assessmentsResponse?.data || [];
     if (!responses || !allAssessments.length) return [];
 
     return responses.map(response => {
@@ -80,7 +80,7 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({ candidateId }) =>
         score: `${correctCount} / ${totalGradableQuestions}`,
       };
     }).filter(Boolean);
-  }, [responses, allAssessments]);
+  }, [responses, assessmentsResponse]);
 
   if (isLoadingResponses || isLoadingAssessments) {
     return <Box sx={{display: 'flex', justifyContent: 'center'}}><CircularProgress size={24} /></Box>;

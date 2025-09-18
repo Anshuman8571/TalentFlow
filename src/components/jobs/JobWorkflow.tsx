@@ -7,7 +7,6 @@ import {
   Card,
   CardContent,
   Avatar,
-  Chip,
   Button,
   LinearProgress,
 } from '@mui/material';

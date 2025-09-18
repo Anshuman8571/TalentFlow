@@ -21,7 +21,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   Work as WorkIcon,
   Add as AddIcon,
-  Edit as EditIcon,
   Visibility as ViewIcon,
   TrendingUp as TrendingUpIcon,
   People as PeopleIcon,

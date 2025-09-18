@@ -7,10 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import { initializeMockDatabase, worker } from './mocks/browser';
 
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return;
-  }
- 
+  // Enable mocking in both development and production for demo purposes
+  // In a real application, you would only enable this in development
+  
   // Initialize the database BEFORE the worker starts.
   await initializeMockDatabase();
  

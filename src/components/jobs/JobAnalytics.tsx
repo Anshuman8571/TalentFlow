@@ -32,7 +32,6 @@ const JobAnalytics: React.FC<JobAnalyticsProps> = ({ jobs, candidates }) => {
   ).length;
   
   const hireRate = totalApplications > 0 ? (hiredCandidates / totalApplications) * 100 : 0;
-  const conversionRate = totalApplications > 0 ? (inProgressCandidates / totalApplications) * 100 : 0;
 
   // Top performing jobs
   const jobsWithStats = jobs.map(job => {

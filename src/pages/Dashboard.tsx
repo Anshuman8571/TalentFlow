@@ -23,12 +23,12 @@ interface CandidatesApiResponse {
 
 const Dashboard: React.FC = () => {
   // Fetch all necessary data for the dashboard widgets
-  const { data: jobsResponse, isLoading: isLoadingJobs } = useQuery<JobsApiResponse>({
+  const { data: jobsResponse } = useQuery<JobsApiResponse>({
     queryKey: ['jobs'],
     queryFn: () => api.jobs.getJobs(),
   });
 
-  const { data: candidatesResponse, isLoading: isLoadingCandidates } = useQuery<CandidatesApiResponse>({
+  const { data: candidatesResponse } = useQuery<CandidatesApiResponse>({
     queryKey: ['candidates'],
     queryFn: () => api.candidates.getCandidates(),
   });
