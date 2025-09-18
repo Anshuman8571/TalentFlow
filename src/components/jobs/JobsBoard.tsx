@@ -21,7 +21,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DndContext, closestCenter, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { Job, JobStatus } from '../../types';
+import { Job, JobStatus, Candidate } from '../../types';
 import JobCard from './JobCard';
 import JobModal from './JobModal';
 import { api } from '../../services/api';
@@ -63,6 +63,14 @@ const JobsBoard: React.FC = () => {
   });
 
   const jobs = response?.data || [];
+
+  // Fetch candidates for job statistics
+  const { data: candidatesResponse } = useQuery({
+    queryKey: ['candidates'],
+    queryFn: () => api.candidates.getCandidates(),
+  });
+
+  const candidates = candidatesResponse?.data || [];
 
   // Fetch all jobs for the tag filter dropdown (without pagination)
   const { data: allJobsResponse } = useQuery<JobsApiResponse>({
@@ -200,28 +208,38 @@ const JobsBoard: React.FC = () => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h5" component="h2" sx={{ fontWeight: 600, color: '#1976d2' }}>
-          Active Jobs
-        </Typography>
-        <Button 
-          variant="contained" 
-          startIcon={<AddIcon />} 
-          onClick={handleCreateJob}
-          sx={{
-            borderRadius: 2,
-            px: 3,
-            py: 1,
-            fontWeight: 600,
-            boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
-            '&:hover': {
-              boxShadow: '0 6px 16px rgba(25, 118, 210, 0.4)',
-              transform: 'translateY(-1px)',
-            },
-            transition: 'all 0.2s ease-in-out',
-          }}
-        >
-          Add New Job
-        </Button>
+        <Box>
+          <Typography variant="h5" component="h2" sx={{ fontWeight: 600, color: '#1976d2' }}>
+            Active Jobs
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            Manage your job postings and track applications
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Typography variant="body2" color="text.secondary">
+            {jobs.length} total jobs • {jobs.filter(job => job.status === 'active').length} active
+          </Typography>
+          <Button 
+            variant="contained" 
+            startIcon={<AddIcon />} 
+            onClick={handleCreateJob}
+            sx={{
+              borderRadius: 2,
+              px: 3,
+              py: 1,
+              fontWeight: 600,
+              boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
+              '&:hover': {
+                boxShadow: '0 6px 16px rgba(25, 118, 210, 0.4)',
+                transform: 'translateY(-1px)',
+              },
+              transition: 'all 0.2s ease-in-out',
+            }}
+          >
+            Add New Job
+          </Button>
+        </Box>
       </Box>
       
       <Paper 
@@ -375,7 +393,7 @@ const JobsBoard: React.FC = () => {
             <Grid container spacing={3}>
               {sortedJobs.map((job) => (
                 <Grid item xs={12} md={6} lg={4} key={job.id}>
-                  <JobCard job={job} onEdit={handleEditJob} onArchive={() => handleUpdateStatus(job, 'archived')} onUnarchive={() => handleUpdateStatus(job, 'active')} />
+                  <JobCard job={job} candidates={candidates} onEdit={handleEditJob} onArchive={() => handleUpdateStatus(job, 'archived')} onUnarchive={() => handleUpdateStatus(job, 'active')} />
                 </Grid>
               ))}
             </Grid>

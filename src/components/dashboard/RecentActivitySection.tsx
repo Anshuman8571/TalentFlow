@@ -11,6 +11,7 @@ import {
   Chip
 } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
@@ -18,38 +19,54 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { api } from '../../services/api';
+import { Candidate, Job } from '../../types';
 
 const RecentActivitySection: React.FC = () => {
-  const recentInterviews = [
-    {
-      candidate: 'Sarah Johnson',
-      position: 'Frontend Developer',
-      time: '2:00 PM',
-      status: 'completed',
-      icon: <PersonIcon />
-    },
-    {
-      candidate: 'Mike Chen',
-      position: 'Backend Developer',
-      time: '3:30 PM',
-      status: 'completed',
-      icon: <PersonIcon />
-    },
-    {
-      candidate: 'Emily Davis',
-      position: 'UI/UX Designer',
-      time: '4:00 PM',
-      status: 'no-show',
-      icon: <PersonIcon />
-    },
-    {
-      candidate: 'Alex Rodriguez',
-      position: 'DevOps Engineer',
-      time: '5:00 PM',
-      status: 'completed',
-      icon: <PersonIcon />
+  // Fetch candidates and jobs data
+  const { data: candidatesResponse } = useQuery({
+    queryKey: ['candidates'],
+    queryFn: () => api.candidates.getCandidates(),
+  });
+
+  const { data: jobsResponse } = useQuery({
+    queryKey: ['jobs'],
+    queryFn: () => api.jobs.getJobs(),
+  });
+
+  const candidates = candidatesResponse?.data || [];
+  const jobs = jobsResponse?.data || [];
+
+  // Generate recent interviews from actual candidate data
+  const generateRecentInterviews = () => {
+    if (candidates.length === 0 || jobs.length === 0) {
+      return [];
     }
-  ];
+
+    // Get candidates in interview stages (Technical, Managerial, HR)
+    const interviewCandidates = candidates.filter((candidate: Candidate) => 
+      ['Technical', 'Managerial', 'HR'].includes(candidate.currentStage)
+    );
+
+    // Take first 4 or all if less than 4
+    const recentCandidates = interviewCandidates.slice(0, 4);
+
+    return recentCandidates.map((candidate: Candidate, index: number) => {
+      const job = jobs.find((j: Job) => j.id === candidate.appliedJobId);
+      const times = ['2:00 PM', '3:30 PM', '4:00 PM', '5:00 PM'];
+      const statuses = ['completed', 'completed', 'no-show', 'completed'];
+      
+      return {
+        candidate: candidate.name,
+        position: job?.title || 'Unknown Position',
+        time: times[index] || '2:00 PM',
+        status: statuses[index] || 'completed',
+        icon: <PersonIcon />
+      };
+    });
+  };
+
+  const recentInterviews = generateRecentInterviews();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -117,7 +134,7 @@ const RecentActivitySection: React.FC = () => {
                 Recent Interviews
               </Typography>
               <List>
-                {recentInterviews.map((interview, index) => (
+                {recentInterviews.map((interview: any, index: number) => (
                   <ListItem key={index} sx={{ py: 1.5, borderRadius: 2, mb: 1, '&:hover': { bgcolor: 'rgba(255,255,255,0.5)' } }}>
                     <ListItemIcon>
                       {interview.icon}

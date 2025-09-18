@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -10,12 +10,15 @@ import {
   CircularProgress,
   Alert,
   IconButton,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import { ArrowBack as ArrowBackIcon, Edit as EditIcon } from '@mui/icons-material';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../../services/api';
 import { Job } from '../../types';
 import JobModal from './JobModal';
+import JobWorkflow from './JobWorkflow';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useStore } from '../../store';
 
@@ -26,6 +29,7 @@ const JobDetail: React.FC = () => {
   const setError = useStore((state) => state.setError);
   
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [activeTab, setActiveTab] = useState(0);
   
   // Fetch job details
   const { data: job, isLoading, error } = useQuery({
@@ -33,6 +37,14 @@ const JobDetail: React.FC = () => {
     queryFn: () => api.jobs.getJob(jobId as string),
     enabled: !!jobId,
   });
+
+  // Fetch candidates for workflow view
+  const { data: candidatesResponse } = useQuery({
+    queryKey: ['candidates'],
+    queryFn: () => api.candidates.getCandidates(),
+  });
+
+  const candidates = candidatesResponse?.data || [];
   
   // Update job mutation
   const updateJobMutation = useMutation({
@@ -62,6 +74,15 @@ const JobDetail: React.FC = () => {
   
   const handleBack = () => {
     navigate('/jobs');
+  };
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
+  const handleCandidateAction = (candidateId: string, action: string) => {
+    // TODO: Implement candidate action handling
+    console.log(`Action ${action} for candidate ${candidateId}`);
   };
   
   if (isLoading) {
@@ -96,55 +117,90 @@ const JobDetail: React.FC = () => {
         </Typography>
       </Box>
       
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-          <Box>
-            <Typography variant="h5" gutterBottom>
-              {job.title}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary" gutterBottom>
-              {job.department} • {job.location}
-            </Typography>
-            <Box sx={{ mt: 1 }}>
-              <Chip 
-                label={job.status === 'active' ? 'Active' : 'Archived'} 
-                color={job.status === 'active' ? 'success' : 'default'}
-                size="small"
-                sx={{ mr: 1 }}
-              />
-              {job.tags.map((tag: string) => (
-                <Chip key={tag} label={tag} size="small" sx={{ mr: 0.5 }} />
-              ))}
+      {/* Navigation Tabs */}
+      <Paper sx={{ mb: 3 }}>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          sx={{
+            '& .MuiTabs-indicator': {
+              backgroundColor: '#1976d2',
+              height: 3,
+              borderRadius: 1.5,
+            },
+            '& .MuiTab-root': {
+              fontWeight: 600,
+              fontSize: '1rem',
+              textTransform: 'none',
+              minWidth: 120,
+            },
+          }}
+        >
+          <Tab label="Overview" />
+          <Tab label="Hiring Pipeline" />
+        </Tabs>
+      </Paper>
+
+      {/* Tab Content */}
+      {activeTab === 0 && (
+        <Paper sx={{ p: 3, mb: 3 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+            <Box>
+              <Typography variant="h5" gutterBottom>
+                {job.title}
+              </Typography>
+              <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+                {job.department} • {job.location}
+              </Typography>
+              <Box sx={{ mt: 1 }}>
+                <Chip 
+                  label={job.status === 'active' ? 'Active' : 'Archived'} 
+                  color={job.status === 'active' ? 'success' : 'default'}
+                  size="small"
+                  sx={{ mr: 1 }}
+                />
+                {job.tags.map((tag: string) => (
+                  <Chip key={tag} label={tag} size="small" sx={{ mr: 0.5 }} />
+                ))}
+              </Box>
             </Box>
+            
+            <Button
+              variant="outlined"
+              startIcon={<EditIcon />}
+              onClick={handleEditJob}
+            >
+              Edit
+            </Button>
           </Box>
           
-          <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
-            onClick={handleEditJob}
-          >
-            Edit
-          </Button>
-        </Box>
-        
-        <Divider sx={{ my: 2 }} />
-        
-        <Typography variant="h6" gutterBottom>
-          Description
-        </Typography>
-        <Typography variant="body1" paragraph>
-          {job.description}
-        </Typography>
-        
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="body2" color="text.secondary">
-            Created: {new Date(job.createdAt).toLocaleDateString()}
+          <Divider sx={{ my: 2 }} />
+          
+          <Typography variant="h6" gutterBottom>
+            Description
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Last Updated: {new Date(job.updatedAt).toLocaleDateString()}
+          <Typography variant="body1" paragraph>
+            {job.description}
           </Typography>
-        </Box>
-      </Paper>
+          
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="body2" color="text.secondary">
+              Created: {new Date(job.createdAt).toLocaleDateString()}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Last Updated: {new Date(job.updatedAt).toLocaleDateString()}
+            </Typography>
+          </Box>
+        </Paper>
+      )}
+
+      {activeTab === 1 && (
+        <JobWorkflow 
+          job={job} 
+          candidates={candidates} 
+          onCandidateAction={handleCandidateAction}
+        />
+      )}
       
       <JobModal
         open={isModalOpen}

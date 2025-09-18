@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardActions, Typography, Chip, Button, Box, IconButton } from '@mui/material';
-import { Job } from '../../types';
+import { Job, Candidate } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -8,13 +8,22 @@ import { Edit as EditIcon, Archive as ArchiveIcon, Unarchive as UnarchiveIcon } 
 
 interface JobCardProps {
   job: Job;
+  candidates?: Candidate[];
   onEdit: (job: Job) => void;
   onArchive: (job: Job) => void;
   onUnarchive: (job: Job) => void;
 }
 
-const JobCard: React.FC<JobCardProps> = ({ job, onEdit, onArchive, onUnarchive }) => {
+const JobCard: React.FC<JobCardProps> = ({ job, candidates = [], onEdit, onArchive, onUnarchive }) => {
   const navigate = useNavigate();
+  
+  // Calculate job statistics from candidates
+  const jobCandidates = candidates.filter(c => c.appliedJobId === job.id);
+  const totalApplications = jobCandidates.length;
+  const hiredCount = jobCandidates.filter(c => c.currentStage === 'Hired').length;
+  const inProgressCount = jobCandidates.filter(c => 
+    ['Screening', 'Technical', 'Managerial', 'HR'].includes(c.currentStage)
+  ).length;
   
   // Set up sortable functionality
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -88,6 +97,34 @@ const JobCard: React.FC<JobCardProps> = ({ job, onEdit, onArchive, onUnarchive }
         >
           {job.department} • {job.location}
         </Typography>
+
+        {/* Application Stats */}
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#1976d2' }}>
+              {totalApplications}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              applicants
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#2e7d32' }}>
+              {hiredCount}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              hired
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, color: '#ed6c02' }}>
+              {inProgressCount}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              in progress
+            </Typography>
+          </Box>
+        </Box>
         
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mt: 1 }}>
           {job.tags.slice(0, 3).map((tag: string) => (

@@ -6,6 +6,7 @@ import KeyMetricsSection from '../components/dashboard/KeyMetricsSection';
 import QuickActionsSection from '../components/dashboard/QuickActionsSection';
 import FeatureShowcaseSection from '../components/dashboard/FeatureShowcaseSection';
 import RecentActivitySection from '../components/dashboard/RecentActivitySection';
+import JobManagementSection from '../components/dashboard/JobManagementSection';
 import { api } from '../services/api';
 import { Candidate, Job } from '../types';
 
@@ -56,11 +57,13 @@ const Dashboard: React.FC = () => {
           newCandidates={newCandidatesThisWeek}
         />
         
+        <JobManagementSection />
+        
         <QuickActionsSection />
         
-        <FeatureShowcaseSection />
-        
         <RecentActivitySection />
+        
+        <FeatureShowcaseSection />
       </Container>
     </Box>
   );

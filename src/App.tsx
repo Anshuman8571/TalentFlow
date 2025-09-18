@@ -51,7 +51,7 @@ function App() {
           <Route path="/*" element={<AppLayout />} />
           
           {/* The root path now redirects to the login page */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </ThemeProvider>
     </QueryClientProvider>

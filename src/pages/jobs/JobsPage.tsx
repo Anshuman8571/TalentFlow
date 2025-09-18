@@ -1,9 +1,31 @@
-import React from 'react';
-import { Container, Box, Typography, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Box, Typography, Paper, Tabs, Tab } from '@mui/material';
 import { motion } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
 import JobsBoard from '../../components/jobs/JobsBoard';
+import JobAnalytics from '../../components/jobs/JobAnalytics';
+import { api } from '../../services/api';
 
 const JobsPage: React.FC = () => {
+  const [activeTab, setActiveTab] = useState(0);
+
+  const { data: jobsResponse } = useQuery({
+    queryKey: ['jobs'],
+    queryFn: () => api.jobs.getJobs(),
+  });
+
+  const { data: candidatesResponse } = useQuery({
+    queryKey: ['candidates'],
+    queryFn: () => api.candidates.getCandidates(),
+  });
+
+  const jobs = jobsResponse?.data || [];
+  const candidates = candidatesResponse?.data || [];
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    setActiveTab(newValue);
+  };
+
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
       {/* Enhanced Header Section */}
@@ -42,16 +64,49 @@ const JobsPage: React.FC = () => {
                 maxWidth: '600px',
                 mx: 'auto',
                 fontWeight: 400,
+                mb: 3,
               }}
             >
               Create, manage, and track all your job postings in one place. 
               Drag and drop to reorder, filter by status, and keep your hiring pipeline organized.
             </Typography>
+            
+            {/* Navigation Tabs */}
+            <Tabs
+              value={activeTab}
+              onChange={handleTabChange}
+              centered
+              sx={{
+                '& .MuiTabs-indicator': {
+                  backgroundColor: '#1976d2',
+                  height: 3,
+                  borderRadius: 1.5,
+                },
+                '& .MuiTab-root': {
+                  fontWeight: 600,
+                  fontSize: '1rem',
+                  textTransform: 'none',
+                  minWidth: 120,
+                },
+              }}
+            >
+              <Tab label="Job Board" />
+              <Tab label="Analytics" />
+            </Tabs>
           </Box>
         </Paper>
       </motion.div>
 
-      <JobsBoard />
+      {/* Tab Content */}
+      <motion.div
+        key={activeTab}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        {activeTab === 0 && <JobsBoard />}
+        {activeTab === 1 && <JobAnalytics jobs={jobs} candidates={candidates} />}
+      </motion.div>
     </Container>
   );
 };
